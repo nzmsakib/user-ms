@@ -14,7 +14,7 @@ class UserFactory extends Factory
      * @var string
      */
     protected $model = User::class;
-
+    protected $userRoles = ['Admin', 'User'];
     /**
      * Define the model's default state.
      *
@@ -23,6 +23,7 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
+            'role' => $this->userRoles[random_int(0, 1)],
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
