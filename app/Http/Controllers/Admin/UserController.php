@@ -27,6 +27,7 @@ class UserController extends Controller
     public function create()
     {
         //
+        return Inertia::render('Admin/CreateUser');
     }
 
     /**
@@ -49,6 +50,7 @@ class UserController extends Controller
     public function show($id)
     {
         //
+        return Inertia::render('Admin/ShowUser');
     }
 
     /**
@@ -60,6 +62,7 @@ class UserController extends Controller
     public function edit($id)
     {
         //
+        return Inertia::render('Admin/EditUser');
     }
 
     /**
