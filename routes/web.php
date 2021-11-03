@@ -1,8 +1,9 @@
 <?php
-
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Resources\UserController;
+use App\Http\Controllers\Resources\RoleController;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -30,17 +31,21 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified', 'role'])->name('dashboard');
 
-Route::prefix('admin')->middleware(['auth', 'verified'])->name('admin.')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::prefix('users')->name('users.')->group(function () {
-        Route::get('/', [UserController::class, 'index'])->name('index');
-        Route::get('/create', [UserController::class, 'create'])->name('create');
-        Route::get('/store', [UserController::class, 'store'])->name('store');
-        Route::get('/show', [UserController::class, 'show'])->name('show');
-        Route::get('/edit', [UserController::class, 'edit'])->name('edit');
-        Route::get('/update', [UserController::class, 'update'])->name('update');
-        Route::get('/destroy', [UserController::class, 'destroy'])->name('destroy');
+// Site management routes from backend
+Route::prefix('manage')->middleware(['auth', 'verified'])->name('manage.')->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Manage/Dashboard');
+    })->name('dashboard');
+
+    Route::resource('users', UserController::class)
+    ->missing(function (Request $request) {
+        return Redirect::route('manage.users.index');
+    });
+
+    Route::resource('roles', RoleController::class)
+    ->missing(function (Request $request) {
+        return Redirect::route('manage.roles.index');
     });
 });
 
