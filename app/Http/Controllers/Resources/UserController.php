@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Resources;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -17,7 +18,16 @@ class UserController extends Controller
     public function index()
     {
         //
-        return Inertia::render('Manage/Users/Index');
+        $users = array_map(function ($user) {
+            // Change user if needed.
+            return $user;
+        }, User::all()->toArray());
+        $roles = Role::all();
+        $mappedRoles = [];
+        foreach ($roles as $key => $value) {
+            $mappedRoles[$value->id] = $value;
+        }
+        return Inertia::render('Manage/Users/Index', ['users' => $users, 'roles' => $mappedRoles]);
     }
 
     /**

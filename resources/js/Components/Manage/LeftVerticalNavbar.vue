@@ -11,45 +11,31 @@ export default {
   },
   data() {
     return {
-      isUsersNavActive: [
+      isNavActive: [
+        route().current("manage.dashboard"),
         route().current("manage.users.index"),
         route().current("manage.users.create"),
         route().current("manage.users.show"),
         route().current("manage.users.edit"),
-      ],
-      isRolesNavActive: [
         route().current("manage.roles.index"),
         route().current("manage.roles.create"),
         route().current("manage.roles.show"),
         route().current("manage.roles.edit"),
       ],
-      isRootNavActive: [route().current("manage.dashboard")],
+      activeNavPos: -1,
     };
   },
   methods: {
-    deactiveAllNavs() {
-      // set active status false to all navs
-      for (let i = 0; i < this.isRootNavActive.length; i++) {
-        this.isRootNavActive[i] = false;
+    navClicked(idx) {
+      if (this.activeNavPos < 0) {
+        this.activeNavPos = this.isNavActive.indexOf(true);
       }
-      for (let i = 0; i < this.isUsersNavActive.length; i++) {
-        this.isUsersNavActive[i] = false;
-      }
-      for (let i = 0; i < this.isRolesNavActive.length; i++) {
-        this.isRolesNavActive[i] = false;
-      }
+      this.isNavActive[this.activeNavPos] = false;
+      this.isNavActive[idx] = true;
+      this.activeNavPos = idx;
     },
-    rootNavClicked(idx) {
-      this.deactiveAllNavs();
-      this.isRootNavActive[idx] = true;
-    },
-    userNavClicked(idx) {
-      this.deactiveAllNavs();
-      this.isUsersNavActive[idx] = true;
-    },
-    roleNavClicked(idx) {
-      this.deactiveAllNavs();
-      this.isRolesNavActive[idx] = true;
+    inBetween(n, a, b) {
+      return (n - a) * (n - b) <= 0;
     },
   },
   props: ["isMenuCollapsed"],
@@ -62,8 +48,8 @@ export default {
       <NavLinkComponent
         :class="isMenuCollapsed ? 'shrinked' : ''"
         :href="route('manage.dashboard')"
-        :active="isRootNavActive[0]"
-        @click="rootNavClicked(0)"
+        :active="isNavActive[0]"
+        @click="navClicked(0)"
       >
         <i class="bi-house"></i>
         <span :class="isMenuCollapsed ? 'd-none' : 'ms-2'">Dashboard</span>
@@ -72,7 +58,7 @@ export default {
     <li class="nav-item">
       <NavLinkComponent
         :class="isMenuCollapsed ? 'shrinked' : ''"
-        :active="isUsersNavActive.includes(true)"
+        :active="inBetween(isNavActive.indexOf(true), 1, 4)"
         data-bs-toggle="collapse"
         href="#usersCollapse"
         aria-expanded="false"
@@ -82,15 +68,15 @@ export default {
         <span :class="isMenuCollapsed ? 'd-none' : 'ms-2'">Users</span>
         <i class="bi-caret-down ms-1"></i>
       </NavLinkComponent>
-      <div :class="isUsersNavActive.includes(true) ? 'collapse show' : 'collapse'" id="usersCollapse">
+      <div :class="inBetween(isNavActive.indexOf(true), 1, 4) ? 'collapse show' : 'collapse'" id="usersCollapse">
         <div class="card card-body py-0 pe-0 border-0 rounded-0">
           <ul class="nav flex-column">
             <li class="nav-item">
               <NavLinkComponent
                 :class="isMenuCollapsed ? 'shrinked' : ''"
                 :href="route('manage.users.index')"
-                @click="userNavClicked(0)"
-                :active="isUsersNavActive[0]"
+                @click="navClicked(1)"
+                :active="isNavActive[1]"
               >
                 <bi class="bi-people"></bi>
                 <span :class="isMenuCollapsed ? 'd-none' : 'ms-2'"
@@ -103,8 +89,8 @@ export default {
                 title="Create new users"
                 :class="isMenuCollapsed ? 'shrinked' : ''"
                 :href="route('manage.users.create')"
-                @click="userNavClicked(1)"
-                :active="isUsersNavActive[1]"
+                @click="navClicked(2)"
+                :active="isNavActive[2]"
               >
                 <i class="bi-person-plus"></i>
                 <span :class="isMenuCollapsed ? 'd-none' : 'ms-2'"
@@ -119,7 +105,7 @@ export default {
     <li class="nav-item">
       <NavLinkComponent
         :class="isMenuCollapsed ? 'shrinked' : ''"
-        :active="isRolesNavActive.includes(true)"
+        :active="inBetween(isNavActive.indexOf(true), 5, 8)"
         data-bs-toggle="collapse"
         href="#rolesCollapse"
         aria-expanded="false"
@@ -129,15 +115,15 @@ export default {
         <span :class="isMenuCollapsed ? 'd-none' : 'ms-2'">Roles</span>
         <i class="bi-caret-down ms-1"></i>
       </NavLinkComponent>
-      <div :class="isRolesNavActive.includes(true) ? 'collapse show' : 'collapse'" id="rolesCollapse">
+      <div :class="inBetween(isNavActive.indexOf(true), 5, 8) ? 'collapse show' : 'collapse'" id="rolesCollapse">
         <div class="card card-body py-0 pe-0 border-0 rounded-0">
           <ul class="nav flex-column">
             <li class="nav-item">
               <NavLinkComponent
                 :class="isMenuCollapsed ? 'shrinked' : ''"
                 :href="route('manage.roles.index')"
-                @click="roleNavClicked(0)"
-                :active="isRolesNavActive[0]"
+                @click="navClicked(5)"
+                :active="isNavActive[5]"
               >
                 <bi class="bi-people"></bi>
                 <span :class="isMenuCollapsed ? 'd-none' : 'ms-2'"
@@ -150,8 +136,8 @@ export default {
                 title="Create new users"
                 :class="isMenuCollapsed ? 'shrinked' : ''"
                 :href="route('manage.roles.create')"
-                @click="roleNavClicked(1)"
-                :active="isRolesNavActive[1]"
+                @click="navClicked(6)"
+                :active="isNavActive[6]"
               >
                 <i class="bi-person-plus"></i>
                 <span :class="isMenuCollapsed ? 'd-none' : 'ms-2'"
