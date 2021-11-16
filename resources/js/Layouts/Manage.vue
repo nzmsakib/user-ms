@@ -51,18 +51,21 @@ export default {
         </Link>
       </div>
 
-      <LeftVerticalNavbarComponent :isMenuCollapsed="isMenuCollapsedDelay" />
-
-      <div class="collapseBtn d-flex align-items-center justify-center" @click="toggleMenuCollapse()">
-        <Link>
-          <i class="bi-arrow-left" v-if="!isMenuCollapsed"></i>
-          <i class="bi-arrow-right" v-if="isMenuCollapsed"></i>
-        </Link>
-      </div>
+      <LeftVerticalNavbarComponent />
     </div>
 
     <!-- Right space for main contents -->
     <div :class="isMenuCollapsed ? 'right-space expanded' : 'right-space'">
+      <!-- Top navigation bar on right side -->
+      <div class="topNavbar">
+        <div class="btn" @click="toggleMenuCollapse()">
+          <i class="bi-arrow-left" v-if="!isMenuCollapsed"></i>
+          <i class="bi-arrow-right" v-if="isMenuCollapsed"></i>
+        </div>
+
+
+      </div>
+
       <slot />
     </div>
   </div>
@@ -73,37 +76,18 @@ export default {
   position: fixed;
   left: 0;
   top: 0;
-  width: 200px;
+  width: 240px;
   height: 100vh;
   background-color: darkslategray;
   transition: all 0.3s ease-in-out;
 }
 
 .left-space.shrinked {
-  width: 88px;
-}
-
-.collapseBtn {
-  font-size: 1.4rem;
-  position: absolute;
-  right: -40px;
-  top: 0;
-  width: 40px;
-  height: 40px;
-  background-color: darkslategray;
-  color: white;
-}
-
-.collapseBtn i{
-  transition: color 0.2s ease-in-out;
-}
-
-.collapseBtn:hover i {
-  color: chartreuse;
+  left: -240px;
 }
 
 .right-space {
-  margin-left: 200px;
+  margin-left: 240px;
   height: 2000px;
   width: auto;
   background-color: gainsboro;
@@ -111,6 +95,24 @@ export default {
 }
 
 .right-space.expanded {
-  margin-left: 88px;
+  margin-left: 0;
 }
+
+.topNavbar {
+  width: 100%;
+  height: 56px;
+  background-color: darkslategray;
+}
+
+.topNavbar .btn {
+  font-size: 1.6rem;
+  color: white;
+  height: 100%;
+  margin: 0;
+}
+
+.topNavbar .btn:hover {
+  background-color: red;
+}
+
 </style>

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Resources;
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -22,12 +21,7 @@ class UserController extends Controller
             // Change user if needed.
             return $user;
         }, User::all()->toArray());
-        $roles = Role::all();
-        $mappedRoles = [];
-        foreach ($roles as $key => $value) {
-            $mappedRoles[$value->id] = $value;
-        }
-        return Inertia::render('Manage/Users/Index', ['users' => $users, 'roles' => $mappedRoles]);
+        return Inertia::render('Manage/Users/Index');
     }
 
     /**

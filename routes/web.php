@@ -28,8 +28,8 @@ Route::get('/', function () {
 })->name('webroot');
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified', 'role'])->name('dashboard');
+    return Redirect::route('manage.dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 
 // Site management routes from backend

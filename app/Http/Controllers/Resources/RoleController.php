@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Resources;
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
@@ -17,7 +19,11 @@ class RoleController extends Controller
     public function index()
     {
         //
-        return Inertia::render('Manage/Roles/Index');
+        $roles = array_map(function ($role) {
+            // Change role if needed.
+            return $role;
+        }, Role::all()->toArray());
+        return Inertia::render('Manage/Roles/Index', ['roles' => $roles]);
     }
 
     /**
@@ -40,40 +46,43 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         //
+        $inputs = $request->all();
+        throw new Exception("Error Processing Request: " . print_r($inputs), 1);
+
+
+        return Redirect::route('manage.roles.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Role  $role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Role $role)
+    public function show($id)
     {
         //
-        return Inertia::render('Manage/Roles/Show');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Role  $role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Role $role)
+    public function edit($id)
     {
         //
-        return Inertia::render('Manage/Roles/Edit');
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Role  $role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -81,10 +90,10 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Role  $role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Role $role)
+    public function destroy($id)
     {
         //
     }
